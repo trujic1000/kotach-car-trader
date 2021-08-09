@@ -20,19 +20,19 @@ export default function CarDetails({car}) {
   }
   return (
     <Box background="white" boxShadow="md" margin="auto" padding={4}>
-      <Flex borderRadius="lg" direction={{base: "column", lg: "row"}}>
+      <Flex borderRadius="lg" direction={{base: "column", md: "row"}}>
         <Image
           src={car.photoUrl}
           alt={car.make + " " + car.model}
-          maxWidth={{lg: "50%", xl: "100%"}}
+          maxWidth={{md: "50%", lg: "100%"}}
         />
-        <Box px={{base: 0, lg: 4}} color="gray.900">
+        <Box px={{base: 0, md: 4}} color="gray.900">
           <Box
             fontWeight="semibold"
             as="h1"
             fontSize="2xl"
             lineHeight="tight"
-            pt={{base: 2, lg: 0}}
+            pt={{base: 2, md: 0}}
             isTruncated
           >
             {car.make + " " + car.model}

@@ -10,9 +10,9 @@ export const Container = ({children, ...props}) => {
   return (
     <Box
       mx="auto"
-      w={["full", "full", ...theme.__breakpoints.asArray.slice(1)]}
-      bg={bgColor[colorMode]}
-      color={color[colorMode]}
+      width={["full", ...theme.__breakpoints.asArray.slice(1)]}
+      // bg={bgColor[colorMode]}
+      // color={color[colorMode]}
       {...props}
     >
       {children}
