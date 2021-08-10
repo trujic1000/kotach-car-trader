@@ -17,6 +17,8 @@ const theme = extendTheme({
   },
   fonts,
   breakpoints,
+  initialColorMode: "dark",
+  useSystemColorMode: true,
   icons: {
     logo: {
       path: (

@@ -9,6 +9,8 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 
+import {DarkModeSwitch} from "../components/DarkModeSwitch";
+
 export default function Nav() {
   const linkColor = useColorModeValue("gray.600", "gray.200");
   const linkHoverColor = useColorModeValue("gray.800", "white");
@@ -41,6 +43,7 @@ export default function Nav() {
           justify={"flex-end"}
           direction={"row"}
           spacing={6}
+          mr={14}
         >
           <Link
             as={NextLink}
@@ -72,6 +75,7 @@ export default function Nav() {
           </Link>
         </Stack>
       </Flex>
+      <DarkModeSwitch />
     </Box>
   );
 }

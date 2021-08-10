@@ -1,4 +1,4 @@
-import {ChakraProvider, ColorModeProvider, Box} from "@chakra-ui/react";
+import {ChakraProvider} from "@chakra-ui/react";
 import axios from "axios";
 import {SWRConfig} from "swr";
 
@@ -9,20 +9,12 @@ import {Container} from "../components/Container";
 function MyApp({Component, pageProps}) {
   return (
     <ChakraProvider resetCSS theme={theme}>
-      <ColorModeProvider
-        options={{
-          useSystemColorMode: true,
-        }}
-      >
-        <Nav />
-        <SWRConfig value={{fetcher: (url) => axios(url).then((r) => r.data)}}>
-          <Container>
-            <Box marginTop={4}>
-              <Component {...pageProps} />
-            </Box>
-          </Container>
-        </SWRConfig>
-      </ColorModeProvider>
+      <Nav />
+      <SWRConfig value={{fetcher: (url) => axios(url).then((r) => r.data)}}>
+        <Container>
+          <Component {...pageProps} />
+        </Container>
+      </SWRConfig>
     </ChakraProvider>
   );
 }

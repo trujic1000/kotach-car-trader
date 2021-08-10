@@ -1,16 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Box, Flex, Image} from "@chakra-ui/react";
+import {Box, Flex, Image, useColorModeValue} from "@chakra-ui/react";
 
 import {openDB} from "../../../../openDB";
-
-const toPrice = (number) =>
-  number.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+import {toPrice} from "../../../../lib/toPrice";
 
 export default function CarDetails({car}) {
+  const bg = useColorModeValue("gray.50", "gray.900");
+  const color = useColorModeValue("black", "white");
+
   if (!car) {
     return (
       <Heading as="h1" size="xl" isTruncated>
@@ -19,14 +17,14 @@ export default function CarDetails({car}) {
     );
   }
   return (
-    <Box background="white" boxShadow="md" margin="auto" padding={4}>
+    <Box boxShadow="md" margin="auto" padding={4} bg={bg} color={color}>
       <Flex borderRadius="lg" direction={{base: "column", md: "row"}}>
         <Image
           src={car.photoUrl}
           alt={car.make + " " + car.model}
           maxWidth={{md: "50%", lg: "100%"}}
         />
-        <Box px={{base: 0, md: 4}} color="gray.900">
+        <Box px={{base: 0, md: 4}}>
           <Box
             fontWeight="semibold"
             as="h1"
@@ -38,35 +36,27 @@ export default function CarDetails({car}) {
             {car.make + " " + car.model}
           </Box>
           <Box fontSize="xl">{toPrice(car.price)}</Box>
-          <Box color="gray.600" fontSize="sm" mt={2}>
-            <Box as="span" fontWeight="semibold">
-              {"Year: "}
-            </Box>
-            {car.year}
-          </Box>
-          <Box color="gray.600" fontSize="sm" mt={1}>
-            <Box as="span" fontWeight="semibold">
-              {"KMs: "}
-            </Box>
-            {car.kilometers}
-          </Box>
-          <Box color="gray.600" fontSize="sm" mt={1}>
-            <Box as="span" fontWeight="semibold">
-              {"Fuel Type: "}
-            </Box>
-            {car.fuelType}
-          </Box>
-          <Box color="gray.600" fontSize="sm" mt={1}>
-            <Box as="span" fontWeight="semibold">
-              {"Details: "}
-            </Box>
-            {car.details}
-          </Box>
+          <CarInfo title="Year" data={car.year} />
+          <CarInfo title="KMs" data={car.kilometers} />
+          <CarInfo title="Fuel Type" data={car.fuelType} />
+          <CarInfo title="Details" data={car.details} />
         </Box>
       </Flex>
     </Box>
   );
 }
+
+const CarInfo = ({title, data}) => {
+  const color = useColorModeValue("gray.600", "gray.400");
+  return (
+    <Box color={color} fontSize="sm" mt={2}>
+      <Box as="span" fontWeight="semibold">
+        {`${title}: `}
+      </Box>
+      {data}
+    </Box>
+  );
+};
 
 export async function getServerSideProps(ctx) {
   const {id} = ctx.params;

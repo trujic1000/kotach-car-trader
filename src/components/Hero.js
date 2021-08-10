@@ -1,6 +1,6 @@
-import { Flex, Heading } from '@chakra-ui/react'
+import {Flex, Heading} from "@chakra-ui/react";
 
-export const Hero = ({ title }) => (
+export const Hero = ({title}) => (
   <Flex justifyContent="center" alignItems="center" height="100vh">
     <Heading
       fontSize="10vw"
@@ -10,8 +10,8 @@ export const Hero = ({ title }) => (
       {title}
     </Heading>
   </Flex>
-)
+);
 
 Hero.defaultProps = {
-  title: 'with-chakra-ui',
-}
+  title: "with-chakra-ui",
+};
