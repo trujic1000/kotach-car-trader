@@ -21,7 +21,7 @@ import {getAsString} from "../lib/getAsString";
 
 const prices = [500, 1000, 5000, 15000, 25000, 50000, 250000];
 
-export default function Home({makes, models}) {
+export default function Search({makes, initialModels, singleColumn}) {
   const router = useRouter();
   const {register, watch, handleSubmit} = useForm({
     defaultValues: {
@@ -31,12 +31,17 @@ export default function Home({makes, models}) {
       maxPrice: getAsString(router.query.maxPrice) || "all",
     },
   });
-  const watchMake = watch("make");
+
+  const make = watch("make");
+  const {data} = useSWR("/api/models?make=" + make, {
+    dedupingInterval: 60000,
+  });
+  const models = data || initialModels;
 
   const onSubmit = (data) => {
     router.push(
       {
-        pathname: "/",
+        pathname: "/cars",
         query: {...data, page: 1},
       },
       undefined,
@@ -46,7 +51,7 @@ export default function Home({makes, models}) {
 
   return (
     <Box
-      bg={useColorModeValue("gray.50", "gray.900")}
+      bg={useColorModeValue("gray.100", "gray.900")}
       color={useColorModeValue("black", "white")}
       margin="auto"
       padding={4}
@@ -55,7 +60,10 @@ export default function Home({makes, models}) {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid
-          gridTemplateColumns={{base: "1fr", md: "1fr 1fr"}}
+          gridTemplateColumns={{
+            base: "1fr",
+            md: singleColumn ? "1fr" : "1fr 1fr",
+          }}
           columnGap={6}
           rowGap={4}
         >
@@ -74,7 +82,18 @@ export default function Home({makes, models}) {
             </FormControl>
           </GridItem>
           <GridItem>
-            <ModelSelect make={watchMake} models={models} register={register} />
+            <FormControl>
+              <FormLabel htmlFor="model">Model</FormLabel>
+              <Select id="model" variant="outline" {...register("model")}>
+                <option value="all">All Models</option>
+                {models.map((model) => (
+                  <option
+                    key={model.model}
+                    value={model.model}
+                  >{`${model.model} (${model.count})`}</option>
+                ))}
+              </Select>
+            </FormControl>
           </GridItem>
           <GridItem>
             <FormControl>
@@ -102,8 +121,8 @@ export default function Home({makes, models}) {
               </Select>
             </FormControl>
           </GridItem>
-          <GridItem colSpan={{base: 1, md: 2}}>
-            <Button type="submit" isFullWidth>
+          <GridItem colSpan={{base: 1, md: singleColumn ? 1 : 2}}>
+            <Button type="submit" isFullWidth colorScheme="green">
               Search
             </Button>
           </GridItem>
@@ -113,38 +132,10 @@ export default function Home({makes, models}) {
   );
 }
 
-export function ModelSelect({make, models, register, ...props}) {
-  const {query} = useRouter();
-
-  const {data} = useSWR("/api/models?make=" + make);
-  const newModels = data || models;
-
-  return (
-    <FormControl>
-      <FormLabel htmlFor="model">Model</FormLabel>
-      <Select
-        id="model"
-        variant="outline"
-        defaultValue={getAsString(query.model) || "all"}
-        {...register("model")}
-        {...props}
-      >
-        <option value="all">All Models</option>
-        {newModels.map((model) => (
-          <option
-            key={model.model}
-            value={model.model}
-          >{`${model.model} (${model.count})`}</option>
-        ))}
-      </Select>
-    </FormControl>
-  );
-}
-
 export async function getServerSideProps({query}) {
   const make = getAsString(query.make);
   const [makes, models] = await Promise.all([getMakes(), getModels(make)]);
-  return {props: {makes, models}};
+  return {props: {makes, initialModels: models}};
 }
 
 export const makeType = PropTypes.shape({
@@ -157,7 +148,8 @@ export const modelType = PropTypes.shape({
   count: PropTypes.number,
 });
 
-Home.propTypes = {
-  makes: PropTypes.arrayOf(makeType),
-  models: PropTypes.arrayOf(modelType),
+Search.propTypes = {
+  makes: PropTypes.arrayOf(makeType).isRequired,
+  initialModels: PropTypes.arrayOf(modelType).isRequired,
+  singleColumn: PropTypes.bool,
 };
