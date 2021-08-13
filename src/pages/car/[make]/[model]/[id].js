@@ -4,6 +4,7 @@ import {Box, Flex, Image, useColorModeValue} from "@chakra-ui/react";
 
 import {openDB} from "../../../../openDB";
 import {toPrice} from "../../../../lib/toPrice";
+import {carType} from "../../../cars";
 
 export default function CarDetails({car}) {
   const bg = useColorModeValue("gray.50", "gray.900");
@@ -46,6 +47,15 @@ export default function CarDetails({car}) {
   );
 }
 
+export async function getServerSideProps(ctx) {
+  const {id} = ctx.params;
+  const db = await openDB();
+  const car = await db.get("SELECT * FROM Car where id = ?", id);
+  return {
+    props: {car: car || null},
+  };
+}
+
 const CarInfo = ({title, data}) => {
   const color = useColorModeValue("gray.600", "gray.400");
   return (
@@ -58,25 +68,11 @@ const CarInfo = ({title, data}) => {
   );
 };
 
-export async function getServerSideProps(ctx) {
-  const {id} = ctx.params;
-  const db = await openDB();
-  const car = await db.get("SELECT * FROM Car where id = ?", id);
-  return {
-    props: {car: car || null},
-  };
-}
-
 CarDetails.propTypes = {
-  car: PropTypes.shape({
-    id: PropTypes.number,
-    make: PropTypes.string,
-    model: PropTypes.string,
-    year: PropTypes.number,
-    fuelType: PropTypes.string,
-    kilometers: PropTypes.number,
-    details: PropTypes.string,
-    price: PropTypes.number,
-    photoUrl: PropTypes.string,
-  }),
+  car: carType,
+};
+
+CarInfo.propTypes = {
+  title: PropTypes.string.isRequired,
+  data: PropTypes.any.isRequired,
 };

@@ -11,7 +11,7 @@ import {
 
 import {openDB} from "../openDB";
 
-export default function faq({faq}) {
+export default function Faq({faq}) {
   return (
     <>
       {faq.map((f) => (
@@ -33,7 +33,7 @@ export default function faq({faq}) {
   );
 }
 
-export async function getStaticProps(ctx) {
+export async function getStaticProps() {
   const db = await openDB();
   const faq = await db.all("SELECT * FROM FAQ ORDER BY createDate DESC");
   return {
@@ -43,7 +43,7 @@ export async function getStaticProps(ctx) {
   };
 }
 
-faq.propTypes = {
+Faq.propTypes = {
   faq: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

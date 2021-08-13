@@ -1,43 +1,49 @@
 import React from "react";
-import router, {useRouter} from "next/router";
+import {useRouter} from "next/router";
+import useSWR from "swr";
 import PropTypes from "prop-types";
-import {Grid, GridItem, useColorModeValue} from "@chakra-ui/react";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import {stringify} from "querystring";
+import {Grid, GridItem} from "@chakra-ui/react";
+import {usePagination} from "@ajna/pagination";
+import deepEqual from "fast-deep-equal";
 
 import Search from ".";
 import {getMakes} from "../database/getMakes";
 import {getModels} from "../database/getModels";
-import {getAsString} from "../lib/getAsString";
 import {getPaginatedCars} from "../database/getPaginatedCars";
+import CarPagination from "../components/CarPagination";
+import {CarCard} from "../components/CarCard";
+import {getAsString} from "../lib/getAsString";
+import CarCardSkeleton from "../components/CarCardSkeleton";
 
 export default function CarsList({makes, models, cars, totalPages}) {
-  const {query} = useRouter();
+  const router = useRouter();
+  const [serverQuery] = React.useState(router.query);
   const {currentPage, setCurrentPage, pagesCount, pages} = usePagination({
     pagesCount: totalPages,
     initialState: {
-      currentPage: parseInt(query.page || "1"),
+      currentPage: parseInt(router.query.page || "1"),
     },
+  });
+
+  const {data} = useSWR("/api/cars?" + stringify(router.query), {
+    dedupingInterval: 60000,
+    initialData: deepEqual(router.query, serverQuery)
+      ? {cars, totalPages}
+      : undefined,
   });
 
   const onPageChange = (nextPage) => {
     setCurrentPage(nextPage);
-    router.push({
-      pathname: "/cars",
-      query: {...query, page: nextPage},
-    });
+    router.push(
+      {
+        pathname: "/cars",
+        query: {...router.query, page: nextPage},
+      },
+      undefined,
+      {shallow: true},
+    );
   };
-
-  const bg = useColorModeValue("gray.100", "gray.900");
-  const bgHover = useColorModeValue("gray.200", "#121212");
-  const color = useColorModeValue("black", "white");
 
   return (
     <Grid gridTemplateColumns="repeat(12, 1fr)" gap={6}>
@@ -45,34 +51,23 @@ export default function CarsList({makes, models, cars, totalPages}) {
         <Search singleColumn makes={makes} initialModels={models} />
       </GridItem>
       <GridItem colSpan={[12, 7, 9, 10]}>
-        <Pagination
-          pagesCount={pagesCount}
+        <CarPagination
           currentPage={currentPage}
           onPageChange={onPageChange}
-        >
-          <PaginationContainer justify="space-between">
-            <PaginationPrevious color={color} bg={bg} _hover={{bg: bgHover}}>
-              Previous
-            </PaginationPrevious>
-            <PaginationPageGroup>
-              {pages.map((page) => (
-                <PaginationPage
-                  key={`pagination_page_${page}`}
-                  page={page}
-                  w={8}
-                  color={color}
-                  bg={bg}
-                  _hover={{bg: bgHover}}
-                  _current={{bg: "green.300"}}
-                />
-              ))}
-            </PaginationPageGroup>
-            <PaginationNext color={color} bg={bg} _hover={{bg: bgHover}}>
-              Next
-            </PaginationNext>
-          </PaginationContainer>
-        </Pagination>
-        {/* <pre>{JSON.stringify({totalPages, cars}, null, 4)}</pre> */}
+          pagesCount={data?.totalPages || pagesCount}
+          pages={pages}
+        />
+        <Grid gridTemplateColumns={{base: "1fr", lg: "1fr 1fr"}} gap={6} my={6}>
+          {!data && [...Array(4)].map((i) => <CarCardSkeleton key={i} />)}
+          {data &&
+            (data.cars || []).map((car) => <CarCard key={car.id} car={car} />)}
+        </Grid>
+        <CarPagination
+          currentPage={currentPage}
+          onPageChange={onPageChange}
+          pagesCount={data?.totalPages || pagesCount}
+          pages={pages}
+        />
       </GridItem>
     </Grid>
   );
