@@ -58,7 +58,7 @@ export default function CarsList({makes, models, cars, totalPages}) {
           pages={pages}
         />
         <Grid gridTemplateColumns={{base: "1fr", lg: "1fr 1fr"}} gap={6} my={6}>
-          {!data && [...Array(4)].map((i) => <CarCardSkeleton key={i} />)}
+          {!data && <CarCardSkeleton />}
           {data &&
             (data.cars || []).map((car) => <CarCard key={car.id} car={car} />)}
         </Grid>

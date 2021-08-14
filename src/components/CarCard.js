@@ -21,12 +21,12 @@ export const CarCard = ({car}) => (
     >
       <Link style={{textDecoration: "none"}}>
         <Box
-          w={"full"}
           bg={useColorModeValue("white", "gray.900")}
           boxShadow={"lg"}
           rounded={"md"}
           p={6}
           overflow={"hidden"}
+          w={"full"}
         >
           <Stack mb={6} direction={"column"} spacing={0}>
             <Text fontSize={"xl"} fontWeight={600}>
@@ -36,10 +36,17 @@ export const CarCard = ({car}) => (
               {toPrice(car.price)}
             </Text>
           </Stack>
-          <Box h={"350px"} bg={"gray.100"} mx={-6} mb={6} pos={"relative"}>
+          <Box
+            bg={"gray.100"}
+            mx={-6}
+            pos={"relative"}
+            h={{base: "250px", xl: "350px"}}
+          >
             <Image src={car.photoUrl} layout={"fill"} />
           </Box>
-          <Text color={"gray.500"}>{car.details}</Text>
+          <Text mt={6} color={"gray.500"}>
+            {car.details}
+          </Text>
         </Box>
       </Link>
     </NextLink>
