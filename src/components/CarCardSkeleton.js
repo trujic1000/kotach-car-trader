@@ -26,7 +26,14 @@ export default function CarCardSkeleton() {
         p={6}
         overflow={"hidden"}
       >
-        <SkeletonText noOfLines={2} mt={4} mb={2} spacing={4} h={"54px"} />
+        <SkeletonText
+          width={"50%"}
+          noOfLines={2}
+          mt={4}
+          mb={2}
+          spacing={4}
+          h={"54px"}
+        />
         <Skeleton
           bg={"gray.100"}
           mx={-6}
@@ -35,9 +42,9 @@ export default function CarCardSkeleton() {
         />
         <SkeletonText
           mt={6}
-          noOfLines={7}
+          noOfLines={6}
           spacing={4}
-          h={{base: "240px", lg: "168px", xl: "144px"}}
+          h={{base: "240px", xl: "168px", "2xl": "144px"}}
         />
       </Box>
     </GridItem>

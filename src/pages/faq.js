@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {NextSeo} from "next-seo";
 import {
   Box,
   Accordion,
@@ -14,6 +15,7 @@ import {openDB} from "../openDB";
 export default function Faq({faq}) {
   return (
     <>
+      <NextSeo title="FAQ" description="Frequently asked questions" />
       {faq.map((f) => (
         <Accordion allowMultiple key={f.id}>
           <AccordionItem>

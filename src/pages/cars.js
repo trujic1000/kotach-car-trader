@@ -1,11 +1,12 @@
 import React from "react";
-import {useRouter} from "next/router";
 import useSWR from "swr";
 import PropTypes from "prop-types";
-import {stringify} from "querystring";
-import {Grid, GridItem} from "@chakra-ui/react";
 import {usePagination} from "@ajna/pagination";
 import deepEqual from "fast-deep-equal";
+import {useRouter} from "next/router";
+import {stringify} from "querystring";
+import {NextSeo} from "next-seo";
+import {Grid, GridItem} from "@chakra-ui/react";
 
 import Search from ".";
 import {getMakes} from "../database/getMakes";
@@ -13,12 +14,13 @@ import {getModels} from "../database/getModels";
 import {getPaginatedCars} from "../database/getPaginatedCars";
 import CarPagination from "../components/CarPagination";
 import {CarCard} from "../components/CarCard";
-import {getAsString} from "../lib/getAsString";
 import CarCardSkeleton from "../components/CarCardSkeleton";
+import {getAsString} from "../lib/getAsString";
 
 export default function CarsList({makes, models, cars, totalPages}) {
   const router = useRouter();
   const [serverQuery] = React.useState(router.query);
+  const [showPagination, setShowPagination] = React.useState(true);
   const {currentPage, setCurrentPage, pagesCount, pages} = usePagination({
     pagesCount: totalPages,
     initialState: {
@@ -33,6 +35,10 @@ export default function CarsList({makes, models, cars, totalPages}) {
       : undefined,
   });
 
+  React.useEffect(() => {
+    setShowPagination(data?.totalPages > 1);
+  }, [data]);
+
   const onPageChange = (nextPage) => {
     setCurrentPage(nextPage);
     router.push(
@@ -46,30 +52,46 @@ export default function CarsList({makes, models, cars, totalPages}) {
   };
 
   return (
-    <Grid gridTemplateColumns="repeat(12, 1fr)" gap={6}>
-      <GridItem colSpan={[12, 5, 3, 2]}>
-        <Search singleColumn makes={makes} initialModels={models} />
-      </GridItem>
-      <GridItem colSpan={[12, 7, 9, 10]}>
-        <CarPagination
-          currentPage={currentPage}
-          onPageChange={onPageChange}
-          pagesCount={data?.totalPages || pagesCount}
-          pages={pages}
-        />
-        <Grid gridTemplateColumns={{base: "1fr", lg: "1fr 1fr"}} gap={6} my={6}>
-          {!data && <CarCardSkeleton />}
-          {data &&
-            (data.cars || []).map((car) => <CarCard key={car.id} car={car} />)}
-        </Grid>
-        <CarPagination
-          currentPage={currentPage}
-          onPageChange={onPageChange}
-          pagesCount={data?.totalPages || pagesCount}
-          pages={pages}
-        />
-      </GridItem>
-    </Grid>
+    <>
+      <NextSeo
+        title="Used vehicles for sale"
+        description={`Shop used vehicles for sale at cartrader.com.`}
+      />
+      <Grid gridTemplateColumns="repeat(12, 1fr)" gap={6}>
+        <GridItem colSpan={[12, 5, 3, 2]}>
+          <Search singleColumn makes={makes} initialModels={models} />
+        </GridItem>
+        <GridItem colSpan={[12, 7, 9, 10]}>
+          {showPagination && (
+            <CarPagination
+              currentPage={currentPage}
+              onPageChange={onPageChange}
+              pagesCount={data?.totalPages || pagesCount}
+              pages={pages}
+            />
+          )}
+          <Grid
+            gridTemplateColumns={{base: "1fr", lg: "1fr 1fr"}}
+            gap={6}
+            my={showPagination ? 6 : 0}
+          >
+            {!data && <CarCardSkeleton />}
+            {data &&
+              (data.cars || []).map((car) => (
+                <CarCard key={car.id} car={car} />
+              ))}
+          </Grid>
+          {showPagination && (
+            <CarPagination
+              currentPage={currentPage}
+              onPageChange={onPageChange}
+              pagesCount={data?.totalPages || pagesCount}
+              pages={pages}
+            />
+          )}
+        </GridItem>
+      </Grid>
+    </>
   );
 }
 

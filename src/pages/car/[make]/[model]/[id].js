@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Box, Flex, Image, useColorModeValue} from "@chakra-ui/react";
+import {NextSeo} from "next-seo";
 
 import {openDB} from "../../../../openDB";
 import {toPrice} from "../../../../lib/toPrice";
@@ -12,38 +13,51 @@ export default function CarDetails({car}) {
 
   if (!car) {
     return (
-      <Heading as="h1" size="xl" isTruncated>
-        Sorry, car not found!
-      </Heading>
+      <>
+        <NextSeo
+          title="Car not found"
+          description="A car you are looking for cannot be found"
+        />
+        <Heading as="h1" size="xl" isTruncated>
+          Sorry, car not found!
+        </Heading>
+      </>
     );
   }
   return (
-    <Box boxShadow="md" margin="auto" padding={4} bg={bg} color={color}>
-      <Flex borderRadius="lg" direction={{base: "column", md: "row"}}>
-        <Image
-          src={car.photoUrl}
-          alt={car.make + " " + car.model}
-          maxWidth={{md: "50%", lg: "100%"}}
-        />
-        <Box px={{base: 0, md: 4}}>
-          <Box
-            fontWeight="semibold"
-            as="h1"
-            fontSize="2xl"
-            lineHeight="tight"
-            pt={{base: 2, md: 0}}
-            isTruncated
-          >
-            {car.make + " " + car.model}
+    <>
+      <NextSeo
+        title={`${car.year} ${car.make} ${car.model}`}
+        description={`Used ${car.year} ${car.make}  
+        ${car.model} for sale for ${toPrice(car.price)}`}
+      />
+      <Box boxShadow="md" margin="auto" padding={4} bg={bg} color={color}>
+        <Flex borderRadius="lg" direction={{base: "column", md: "row"}}>
+          <Image
+            src={car.photoUrl}
+            alt={`${car.year} ${car.make} ${car.model}`}
+            maxWidth={{md: "50%", lg: "100%"}}
+          />
+          <Box px={{base: 0, md: 4}}>
+            <Box
+              fontWeight="semibold"
+              as="h1"
+              fontSize="2xl"
+              lineHeight="tight"
+              pt={{base: 2, md: 0}}
+              isTruncated
+            >
+              {`${car.year} ${car.make} ${car.model}`}
+            </Box>
+            <Box fontSize="xl">{toPrice(car.price)}</Box>
+            <CarInfo title="Year" data={car.year} />
+            <CarInfo title="KMs" data={car.kilometers} />
+            <CarInfo title="Fuel Type" data={car.fuelType} />
+            <CarInfo title="Details" data={car.details} />
           </Box>
-          <Box fontSize="xl">{toPrice(car.price)}</Box>
-          <CarInfo title="Year" data={car.year} />
-          <CarInfo title="KMs" data={car.kilometers} />
-          <CarInfo title="Fuel Type" data={car.fuelType} />
-          <CarInfo title="Details" data={car.details} />
-        </Box>
-      </Flex>
-    </Box>
+        </Flex>
+      </Box>
+    </>
   );
 }
 
