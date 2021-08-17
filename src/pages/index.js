@@ -15,10 +15,11 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import {getMakes} from "../database/getMakes";
+// import {getMakes} from "../database/getMakes";
 import {getModels} from "../database/getModels";
 import {toPrice} from "../lib/toPrice";
 import {getAsString} from "../lib/getAsString";
+import {getMakes} from "../lib/api";
 
 const prices = [500, 1000, 5000, 15000, 25000, 50000, 250000];
 
@@ -78,11 +79,11 @@ export default function Search({makes, initialModels, singleColumn}) {
                 <FormLabel htmlFor="make">Make</FormLabel>
                 <Select id="make" variant="outline" {...register("make")}>
                   <option value="all">All Makes</option>
-                  {makes.map((make) => (
+                  {makes.map(([make, count]) => (
                     <option
-                      key={make.make}
-                      value={make.make}
-                    >{`${make.make} (${make.count})`}</option>
+                      key={make}
+                      value={make}
+                    >{`${make} (${count})`}</option>
                   ))}
                 </Select>
               </FormControl>
@@ -164,7 +165,7 @@ export const modelType = PropTypes.shape({
 });
 
 Search.propTypes = {
-  makes: PropTypes.arrayOf(makeType).isRequired,
+  makes: PropTypes.array.isRequired,
   initialModels: PropTypes.arrayOf(modelType).isRequired,
   singleColumn: PropTypes.bool,
 };

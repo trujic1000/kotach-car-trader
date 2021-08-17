@@ -16,7 +16,7 @@ export default function CarDetails({car}) {
       <>
         <NextSeo
           title="Car not found"
-          description="A car you are looking for cannot be found"
+          description="Car you are looking for cannot be found"
         />
         <Heading as="h1" size="xl" isTruncated>
           Sorry, car not found!

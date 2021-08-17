@@ -1,4 +1,3 @@
-import {getModels} from "../../database/getModels";
 import {getPaginatedCars} from "../../database/getPaginatedCars";
 
 export default async function cars(req, res) {
