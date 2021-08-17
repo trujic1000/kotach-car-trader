@@ -11,6 +11,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import {toPrice} from "../utils";
+import {imageBuilder} from "../lib/sanity";
 
 export const CarCard = ({car}) => (
   <GridItem>
@@ -42,7 +43,7 @@ export const CarCard = ({car}) => (
             pos={"relative"}
             h={{base: "250px", xl: "350px"}}
           >
-            <Image src={car.photoUrl} layout={"fill"} />
+            <Image src={imageBuilder(car.image).url()} layout={"fill"} />
           </Box>
           <Text mt={6} color={"gray.500"}>
             {car.details}

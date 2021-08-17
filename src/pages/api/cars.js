@@ -1,6 +1,6 @@
-import {getPaginatedCars} from "../../database/getPaginatedCars";
+import {getCars} from "../../lib/api";
 
 export default async function cars(req, res) {
-  const cars = await getPaginatedCars(req.query);
-  res.json(cars);
+  const data = await getCars(req.query);
+  res.json(data);
 }
