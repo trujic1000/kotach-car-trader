@@ -1,5 +1,5 @@
-import {getAsString} from "../lib/getAsString";
 import {openDB} from "../openDB";
+import {getAsString} from "../utils";
 
 const mainQuery = `
   FROM car

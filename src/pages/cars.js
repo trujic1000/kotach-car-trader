@@ -9,13 +9,14 @@ import {NextSeo} from "next-seo";
 import {Grid, GridItem} from "@chakra-ui/react";
 
 import Search from ".";
-import {getMakes} from "../database/getMakes";
+// import {getMakes} from "../database/getMakes";
 import {getModels} from "../database/getModels";
 import {getPaginatedCars} from "../database/getPaginatedCars";
 import CarPagination from "../components/CarPagination";
 import {CarCard} from "../components/CarCard";
 import CarCardSkeleton from "../components/CarCardSkeleton";
-import {getAsString} from "../lib/getAsString";
+import {getAsString} from "../utils";
+import {getMakes} from "../lib/api";
 
 export default function CarsList({makes, models, cars, totalPages}) {
   const router = useRouter();
@@ -124,10 +125,10 @@ export const carType = PropTypes.shape({
   photoUrl: PropTypes.string,
 });
 
-export const makeType = PropTypes.shape({
-  make: PropTypes.string,
-  count: PropTypes.number,
-});
+// export const makeType = PropTypes.shape({
+//   make: PropTypes.string,
+//   count: PropTypes.number,
+// });
 
 export const modelType = PropTypes.shape({
   model: PropTypes.string,
@@ -135,7 +136,7 @@ export const modelType = PropTypes.shape({
 });
 
 CarsList.propTypes = {
-  makes: PropTypes.arrayOf(makeType).isRequired,
+  makes: PropTypes.array.isRequired,
   models: PropTypes.arrayOf(modelType).isRequired,
   cars: PropTypes.arrayOf(carType).isRequired,
   totalPages: PropTypes.number.isRequired,

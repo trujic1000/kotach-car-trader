@@ -10,7 +10,7 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import {toPrice} from "../lib/toPrice";
+import {toPrice} from "../utils";
 
 export const CarCard = ({car}) => (
   <GridItem>

@@ -4,7 +4,7 @@ import {Box, Flex, Image, useColorModeValue} from "@chakra-ui/react";
 import {NextSeo} from "next-seo";
 
 import {openDB} from "../../../../openDB";
-import {toPrice} from "../../../../lib/toPrice";
+import {toPrice} from "../../../../utils";
 import {carType} from "../../../cars";
 
 export default function CarDetails({car}) {
@@ -70,6 +70,10 @@ export async function getServerSideProps(ctx) {
   };
 }
 
+CarDetails.propTypes = {
+  car: carType,
+};
+
 const CarInfo = ({title, data}) => {
   const color = useColorModeValue("gray.600", "gray.400");
   return (
@@ -80,10 +84,6 @@ const CarInfo = ({title, data}) => {
       {data}
     </Box>
   );
-};
-
-CarDetails.propTypes = {
-  car: carType,
 };
 
 CarInfo.propTypes = {

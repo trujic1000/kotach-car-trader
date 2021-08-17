@@ -1,5 +1,5 @@
-import {getModels} from "../../database/getModels";
-import {getAsString} from "../../lib/getAsString";
+import {getModels} from "../../lib/api";
+import {getAsString} from "../../utils";
 
 export default async function models(req, res) {
   const make = getAsString(req.query.make);
