@@ -17,7 +17,7 @@ export const CarCard = ({car}) => (
   <GridItem>
     <NextLink
       href="/car/[make]/[model]/[id]"
-      as={`/car/${car.make}/${car.model}/${car.id}`}
+      as={`/car/${car.make}/${car.model}/${car._id}`}
       passHref
     >
       <Link style={{textDecoration: "none"}}>

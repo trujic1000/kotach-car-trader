@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "node ./db.js && next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "prettier": "prettier --write \"**/*.js\""
@@ -23,8 +23,6 @@
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.12.2",
     "react-uuid": "^1.0.2",
-    "sqlite": "^4.0.23",
-    "sqlite3": "^5.0.2",
     "swr": "^0.5.6"
   },
   "license": "MIT",

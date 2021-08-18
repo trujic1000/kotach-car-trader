@@ -1,6 +1,19 @@
 import client from "./sanity";
 import {getAsString, transformData} from "../utils";
 
+// helper functions
+function getValueStr(value) {
+  const str = getAsString(value);
+  return str || "all";
+}
+
+function getValueNumber(value) {
+  const str = getValueStr(value);
+  const number = parseInt(str);
+  return isNaN(number) ? "all" : number;
+}
+
+// API
 export async function getMakes() {
   const query = `*[_type == 'car' ] | order(make) {make}`;
   const res = await client.fetch(query);
@@ -45,13 +58,15 @@ export async function getCars(query) {
   return {cars, totalPages: Math.ceil(totalRows / rowsPerPage)};
 }
 
-function getValueStr(value) {
-  const str = getAsString(value);
-  return str || "all";
+export async function getCarById(id) {
+  const query = `*[_type == "car" && _id == $id]`;
+  const params = {id};
+  const data = await client.fetch(query, params);
+  return data[0];
 }
 
-function getValueNumber(value) {
-  const str = getValueStr(value);
-  const number = parseInt(str);
-  return isNaN(number) ? "all" : number;
+export async function getFAQ() {
+  const query = `*[_type == "faq"] {_id, question, answer}`;
+  const data = await client.fetch(query);
+  return data;
 }

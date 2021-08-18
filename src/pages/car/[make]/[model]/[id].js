@@ -1,11 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Box, Flex, Image, useColorModeValue} from "@chakra-ui/react";
+import {Box, Flex, Heading, Image, useColorModeValue} from "@chakra-ui/react";
 import {NextSeo} from "next-seo";
 
-import {openDB} from "../../../../openDB";
 import {toPrice} from "../../../../utils";
 import {carType} from "../../../cars";
+import {getCarById} from "../../../../lib/api";
+import {imageBuilder} from "../../../../lib/sanity";
 
 export default function CarDetails({car}) {
   const bg = useColorModeValue("gray.50", "gray.900");
@@ -34,7 +35,7 @@ export default function CarDetails({car}) {
       <Box boxShadow="md" margin="auto" padding={4} bg={bg} color={color}>
         <Flex borderRadius="lg" direction={{base: "column", md: "row"}}>
           <Image
-            src={car.photoUrl}
+            src={imageBuilder(car.image).url()}
             alt={`${car.year} ${car.make} ${car.model}`}
             maxWidth={{md: "50%", lg: "100%"}}
           />
@@ -51,7 +52,7 @@ export default function CarDetails({car}) {
             </Box>
             <Box fontSize="xl">{toPrice(car.price)}</Box>
             <CarInfo title="Year" data={car.year} />
-            <CarInfo title="KMs" data={car.kilometers} />
+            <CarInfo title="Miles" data={car.miles.toLocaleString("en-US")} />
             <CarInfo title="Fuel Type" data={car.fuelType} />
             <CarInfo title="Details" data={car.details} />
           </Box>
@@ -61,10 +62,9 @@ export default function CarDetails({car}) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  const {id} = ctx.params;
-  const db = await openDB();
-  const car = await db.get("SELECT * FROM Car where id = ?", id);
+export async function getServerSideProps({params}) {
+  const {id} = params;
+  const car = await getCarById(id);
   return {
     props: {car: car || null},
   };

@@ -10,7 +10,7 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 
-import {openDB} from "../openDB";
+import {getFAQ} from "../lib/api";
 
 export default function Faq({faq}) {
   return (
@@ -36,8 +36,7 @@ export default function Faq({faq}) {
 }
 
 export async function getStaticProps() {
-  const db = await openDB();
-  const faq = await db.all("SELECT * FROM FAQ ORDER BY createDate DESC");
+  const faq = await getFAQ();
   return {
     props: {
       faq,
