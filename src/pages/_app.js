@@ -10,7 +10,10 @@ import {Container} from "../components/Container";
 function MyApp({Component, pageProps}) {
   return (
     <>
-      <DefaultSeo defaultTitle="Car Trader" titleTemplate="Car Trader | %s" />
+      <DefaultSeo
+        defaultTitle="Kotach Car Trader"
+        titleTemplate="Kotach Car Trader | %s"
+      />
       <ChakraProvider resetCSS theme={theme}>
         <Nav />
         <SWRConfig value={{fetcher: (url) => axios(url).then((r) => r.data)}}>

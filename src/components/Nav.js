@@ -36,7 +36,7 @@ export default function Nav() {
             fontFamily={"heading"}
             color={useColorModeValue("gray.800", "white")}
           >
-            Car Trader
+            Kotach Car Trader
           </Link>
         </Flex>
 

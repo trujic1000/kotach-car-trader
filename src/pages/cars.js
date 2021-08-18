@@ -36,7 +36,7 @@ export default function CarsList({makes, models, cars, totalPages}) {
 
   React.useEffect(() => {
     // TODO: fix the bug
-    setShowPagination(!data || data?.totalPages > 1);
+    setShowPagination(data?.totalPages > 1);
   }, [data]);
 
   const onPageChange = (nextPage) => {

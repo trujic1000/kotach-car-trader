@@ -1,6 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Box, Flex, Heading, Image, useColorModeValue} from "@chakra-ui/react";
+import {useRouter} from "next/router";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import {NextSeo} from "next-seo";
 
 import {toPrice} from "../../../../utils";
@@ -9,8 +17,11 @@ import {getCarById} from "../../../../lib/api";
 import {imageBuilder} from "../../../../lib/sanity";
 
 export default function CarDetails({car}) {
+  const router = useRouter();
   const bg = useColorModeValue("gray.50", "gray.900");
   const color = useColorModeValue("black", "white");
+
+  const goBack = () => router.back();
 
   if (!car) {
     return (
@@ -32,6 +43,9 @@ export default function CarDetails({car}) {
         description={`Used ${car.year} ${car.make}  
         ${car.model} for sale for ${toPrice(car.price)}`}
       />
+      <Button type="button" mb={4} bg={bg} color={color} onClick={goBack}>
+        Go Back
+      </Button>
       <Box boxShadow="md" margin="auto" padding={4} bg={bg} color={color}>
         <Flex borderRadius="lg" direction={{base: "column", md: "row"}}>
           <Image
