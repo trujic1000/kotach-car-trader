@@ -18,18 +18,19 @@ import {getMakes, getModels, getCars} from "../lib/api";
 export default function CarsList({makes, models, cars, totalPages}) {
   const router = useRouter();
   const [serverQuery] = React.useState(router.query);
-  const {currentPage, setCurrentPage, pagesCount, pages} = usePagination({
-    pagesCount: totalPages,
-    initialState: {
-      currentPage: parseInt(router.query.page || "1"),
-    },
-  });
 
   const {data} = useSWR("/api/cars?" + stringify(router.query), {
     dedupingInterval: 60000,
     initialData: deepEqual(router.query, serverQuery)
       ? {cars, totalPages}
       : undefined,
+  });
+
+  const {currentPage, setCurrentPage, pagesCount, pages} = usePagination({
+    pagesCount: data?.totalPages || totalPages,
+    initialState: {
+      currentPage: parseInt(router.query.page || "1"),
+    },
   });
 
   const onPageChange = (nextPage) => {
