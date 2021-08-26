@@ -1,8 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "concurrently \"next\" \"cd studio && sanity start\"",
+    "build": "echo 'Building Sanity to public/studio…' && cd studio && sanity build ../public/studio -y && cd .. && next build",
     "start": "next start",
     "prettier": "prettier --write \"**/*.js\""
   },
@@ -27,6 +27,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "concurrently": "^6.2.1",
     "prettier": "2.3.2"
   }
 }

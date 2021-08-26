@@ -9,7 +9,6 @@ import {NextSeo} from "next-seo";
 import {Grid, GridItem} from "@chakra-ui/react";
 
 import Search from ".";
-// import {getPaginatedCars} from "../database/getPaginatedCars";
 import CarPagination from "../components/CarPagination";
 import {CarCard} from "../components/CarCard";
 import CarCardSkeleton from "../components/CarCardSkeleton";
@@ -19,7 +18,6 @@ import {getMakes, getModels, getCars} from "../lib/api";
 export default function CarsList({makes, models, cars, totalPages}) {
   const router = useRouter();
   const [serverQuery] = React.useState(router.query);
-  const [showPagination, setShowPagination] = React.useState(true);
   const {currentPage, setCurrentPage, pagesCount, pages} = usePagination({
     pagesCount: totalPages,
     initialState: {
@@ -33,11 +31,6 @@ export default function CarsList({makes, models, cars, totalPages}) {
       ? {cars, totalPages}
       : undefined,
   });
-
-  React.useEffect(() => {
-    // TODO: fix the bug
-    setShowPagination(data?.totalPages > 1);
-  }, [data]);
 
   const onPageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -62,18 +55,16 @@ export default function CarsList({makes, models, cars, totalPages}) {
           <Search singleColumn makes={makes} initialModels={models} />
         </GridItem>
         <GridItem colSpan={[12, 7, 9, 10]}>
-          {showPagination && (
-            <CarPagination
-              currentPage={currentPage}
-              onPageChange={onPageChange}
-              pagesCount={data?.totalPages || pagesCount}
-              pages={pages}
-            />
-          )}
+          <CarPagination
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+            pagesCount={data?.totalPages || pagesCount}
+            pages={pages}
+          />
           <Grid
             gridTemplateColumns={{base: "1fr", lg: "1fr 1fr"}}
             gap={6}
-            my={showPagination ? 6 : 0}
+            my={6}
           >
             {!data && <CarCardSkeleton />}
             {data &&
@@ -81,14 +72,12 @@ export default function CarsList({makes, models, cars, totalPages}) {
                 <CarCard key={car._id} car={car} />
               ))}
           </Grid>
-          {showPagination && (
-            <CarPagination
-              currentPage={currentPage}
-              onPageChange={onPageChange}
-              pagesCount={data?.totalPages || pagesCount}
-              pages={pages}
-            />
-          )}
+          <CarPagination
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+            pagesCount={data?.totalPages || pagesCount}
+            pages={pages}
+          />
         </GridItem>
       </Grid>
     </>

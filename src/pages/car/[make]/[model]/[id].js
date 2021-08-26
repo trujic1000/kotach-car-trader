@@ -51,7 +51,7 @@ export default function CarDetails({car}) {
           <Image
             src={imageBuilder(car.image).url()}
             alt={`${car.year} ${car.make} ${car.model}`}
-            maxWidth={{md: "50%", lg: "100%"}}
+            maxWidth={{md: "50%"}}
           />
           <Box px={{base: 0, md: 4}}>
             <Box
