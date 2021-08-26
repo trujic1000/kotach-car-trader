@@ -849,6 +849,11 @@
     "@sanity/block-content-to-hyperscript" "^3.0.0"
     prop-types "^15.6.2"
 
+"@sanity/cli@^2.17.0":
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/@sanity/cli/-/cli-2.17.0.tgz#64272bb4dd63b8723ad4728f95156d2ed5e6df1f"
+  integrity sha512-p11jAUyvdREJZkn7+264hRL6soM7ruRYtRfuSsj5N0rCjzW3Cd+o/QuTQr5YQoz4fBLm4Oh6W/o8xVXPy6SO6Q==
+
 "@sanity/client@2.14.0", "@sanity/client@^2.14.0":
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/@sanity/client/-/client-2.14.0.tgz#c1d4f2e4b281b0c1e6fabfb6c9b7badb68d37b54"
