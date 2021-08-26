@@ -4,6 +4,7 @@
     "dev": "concurrently \"next\" \"cd studio && sanity start\"",
     "build": "echo 'Building Sanity to public/studio…' && cd studio && sanity build ../public/studio -y && cd .. && next build",
     "start": "next start",
+    "postinstall": "lerna bootstrap",
     "prettier": "prettier --write \"**/*.js\""
   },
   "dependencies": {
