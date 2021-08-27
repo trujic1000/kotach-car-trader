@@ -7,8 +7,10 @@ Next.js application for listing/searching cars.
 This project uses the following technologies:
 
 - [Next.js](https://nextjs.org/) for frontend
-- [Sanity.io](https://www.sanity.io/) as a headless CMS to add cars/faqs
+- [SWR](https://github.com/vercel/swr) for data fetching
 - [Chakra UI](https://chakra-ui.com/) for styling the app
+- [React Hook Form](https://react-hook-form.com/) for handling forms
+- [Sanity.io](https://www.sanity.io/) as a headless CMS to add cars/faqs
 
 ## Quick Start
 
